@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"io"
 	"log"
 	"os"
@@ -11,6 +12,7 @@ import (
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/filters"
 	dockerclient "github.com/docker/docker/client"
+	"github.com/morikuni/aec"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 	"github.com/zanetworker/docktorino/internal/structuretests"
@@ -19,9 +21,21 @@ import (
 var startCmdDesc = `
 This command starts to the docktorino listener which triggers a tests each time the image of choice is built`
 
+var testing = `
+_________ _______  _______ __________________ _        _______ 
+\__   __/(  ____ \(  ____ \\__   __/\__   __/( (    /|(  ____ \
+   ) (   | (    \/| (    \/   ) (      ) (   |  \  ( || (    \/
+   | |   | (__    | (_____    | |      | |   |   \ | || |      
+   | |   |  __)   (_____  )   | |      | |   | (\ \) || | ____ 
+   | |   | (            ) |   | |      | |   | | \   || | \_  )
+   | |   | (____/\/\____) |   | |   ___) (___| )  \  || (___) |
+   )_(   (_______/\_______)   )_(   \_______/|/    )_)(_______)
+															   
+================================================================`
+
 type startCmd struct {
-	image   string
-	verbose bool
+	image          string
+	verbose, quiet bool
 }
 
 func newStartCmd(out io.Writer) *cobra.Command {
@@ -39,11 +53,13 @@ func newStartCmd(out io.Writer) *cobra.Command {
 
 	f.StringVarP(&startCmdParams.image, "image", "i", "", "the image you wish to trigger tests for")
 	f.BoolVarP(&startCmdParams.verbose, "verbose", "v", false, "verbose testing output")
+	f.BoolVarP(&startCmdParams.quiet, "quiet", "q", false, "quiet surpress output")
 
 	return startCmd
 }
 
 func (s *startCmd) run() error {
+	fmt.Println(aec.GreenF.Apply(testing))
 	if len(s.image) != 0 {
 		ctx, cancel := context.WithCancel(context.Background())
 
@@ -83,7 +99,7 @@ func (s *startCmd) run() error {
 			case e := <-ch:
 				tag := e.Actor.Attributes["name"]
 				if tag == s.image {
-					structuretests.ParseTests(tag, "docker", s.verbose, false)
+					structuretests.ParseTests(tag, "docker", s.verbose, s.quiet)
 				}
 			case <-ctx.Done():
 				break

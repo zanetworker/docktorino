@@ -27,8 +27,8 @@ func ParseTests(imageName, driver string, verboseOutput, supressOut bool) {
 		}
 		structureTest := v2.StructureTest{}
 
+		// add commandTests from docker image
 		commandTests, _ := labels.GetImageCommandTests(imageName)
-
 		if verboseOutput {
 			pp.Println(commandTests)
 		}
@@ -39,7 +39,9 @@ func ParseTests(imageName, driver string, verboseOutput, supressOut bool) {
 			targetCommandTest.Command = commandTest.Command
 
 			commandTestArgs := strings.Split(commandTest.Args[0], ",")
-			targetCommandTest.Args = commandTestArgs
+			if !containsEmptyStrings(commandTestArgs) {
+				targetCommandTest.Args = commandTestArgs
+			}
 
 			excludedOutput := []string{commandTest.ExcludedOutput}
 			if !containsEmptyStrings(excludedOutput) {
@@ -51,7 +53,7 @@ func ParseTests(imageName, driver string, verboseOutput, supressOut bool) {
 				targetCommandTest.ExcludedError = excludedError
 			}
 
-			expectedOuput := []string{commandTest.ExcludedOutput}
+			expectedOuput := []string{commandTest.ExpectedOutput}
 			if !containsEmptyStrings(expectedOuput) {
 				targetCommandTest.ExpectedOutput = expectedOuput
 			}
@@ -68,6 +70,7 @@ func ParseTests(imageName, driver string, verboseOutput, supressOut bool) {
 			structureTest.CommandTests = append(structureTest.CommandTests, targetCommandTest)
 		}
 
+		// add fileContentTests from docker image
 		fileContentTests, _ := labels.GetImageFileContentTests(imageName)
 		if verboseOutput {
 			pp.Println(fileContentTests)
@@ -96,6 +99,7 @@ func ParseTests(imageName, driver string, verboseOutput, supressOut bool) {
 			structureTest.FileContentTests = append(structureTest.FileContentTests, targetFileContentTest)
 		}
 
+		// add fileExistenceTests from docker image
 		fileExistenceTests, _ := labels.GetImageFileExistenceTests(imageName)
 		if verboseOutput {
 			pp.Println(fileExistenceTests)
@@ -120,6 +124,7 @@ func ParseTests(imageName, driver string, verboseOutput, supressOut bool) {
 			structureTest.FileExistenceTests = append(structureTest.FileExistenceTests, targetFileExistenceTest)
 		}
 
+		// get metadata tests from docker image
 		metadataTests, _ := labels.GetImageMetadataTests(imageName)
 		if verboseOutput {
 			pp.Println(metadataTests)
@@ -130,7 +135,9 @@ func ParseTests(imageName, driver string, verboseOutput, supressOut bool) {
 			targetMetaDataTest.Env = getEnvVar(metadataTest.Env)
 
 			cmdArgs := strings.Split(metadataTest.Cmd, ",")
-			targetMetaDataTest.Cmd = &cmdArgs
+			if !containsEmptyStrings(cmdArgs) {
+				targetMetaDataTest.Cmd = &cmdArgs
+			}
 
 			entrypointArgs := strings.Split(metadataTest.EntryPoint, ",")
 			if !containsEmptyStrings(entrypointArgs) {
@@ -155,16 +162,26 @@ func ParseTests(imageName, driver string, verboseOutput, supressOut bool) {
 		}
 
 		structureTest.SetDriverImpl(driverImpl, *args)
+
+		// execute tests
 		results := structureTest.RunAll()
 		out := &output.OutWriter{
 			Verbose: verboseOutput,
 			Quiet:   supressOut,
 		}
+
+		// execute metadata tests and add it to results
+		metadataTestResult := structureTest.RunMetadataTests()
+		results = append(results, metadataTestResult)
+
+		// add all results
 		fullResults := []*unversioned.FullResult{}
 		fullResults = append(fullResults, &unversioned.FullResult{
 			Results: results,
 		})
+
 		out.OutputResults(fullResults, imageName)
+
 	} else {
 		log.Error("Image is not available locally, trying to pull it from Dockerhub!")
 		if err := pullDockerImage(imageName); err != nil {

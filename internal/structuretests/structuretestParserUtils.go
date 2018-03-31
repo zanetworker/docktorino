@@ -60,6 +60,14 @@ func containsEmptyStrings(sliceToCheck []string) bool {
 	}
 	return false
 }
+
+func emptyString(stringToCheck string) bool {
+	if len(stringToCheck) == 0 {
+		return true
+	}
+	return false
+}
+
 func getEnvVar(envVarsToConvert string) []unversioned.EnvVar {
 	envVars := strings.Split(envVarsToConvert, ",")
 	envVarsToReturn := []unversioned.EnvVar{}

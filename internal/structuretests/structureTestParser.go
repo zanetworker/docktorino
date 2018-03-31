@@ -28,7 +28,10 @@ func ParseTests(imageName, driver string, verboseOutput, supressOut bool) {
 		structureTest := v2.StructureTest{}
 
 		commandTests, _ := labels.GetImageCommandTests(imageName)
-		pp.Println(commandTests)
+
+		if verboseOutput {
+			pp.Println(commandTests)
+		}
 
 		for _, commandTest := range *commandTests {
 			targetCommandTest := v2.CommandTest{}
@@ -66,15 +69,25 @@ func ParseTests(imageName, driver string, verboseOutput, supressOut bool) {
 		}
 
 		fileContentTests, _ := labels.GetImageFileContentTests(imageName)
-		pp.Println(fileContentTests)
+		if verboseOutput {
+			pp.Println(fileContentTests)
+		}
 
 		for _, fileContentTest := range *fileContentTests {
 			targetFileContentTest := v2.FileContentTest{}
+
 			targetFileContentTest.Name = fileContentTest.Name
 			targetFileContentTest.Path = fileContentTest.Path
 
-			targetFileContentTest.ExpectedContents = []string{fileContentTest.ExpectedContents}
-			targetFileContentTest.ExcludedContents = []string{fileContentTest.ExcludedContents}
+			expectedContents := []string{fileContentTest.ExpectedContents}
+			if !containsEmptyStrings(expectedContents) {
+				targetFileContentTest.ExpectedContents = []string{fileContentTest.ExpectedContents}
+			}
+
+			excludedContents := []string{fileContentTest.ExcludedContents}
+			if !containsEmptyStrings(excludedContents) {
+				targetFileContentTest.ExcludedContents = []string{fileContentTest.ExcludedContents}
+			}
 
 			err := targetFileContentTest.Validate()
 			if err != nil {
@@ -84,15 +97,21 @@ func ParseTests(imageName, driver string, verboseOutput, supressOut bool) {
 		}
 
 		fileExistenceTests, _ := labels.GetImageFileExistenceTests(imageName)
-		pp.Println(fileExistenceTests)
+		if verboseOutput {
+			pp.Println(fileExistenceTests)
+		}
 
 		for _, fileExistenceTest := range *fileExistenceTests {
 			targetFileExistenceTest := v2.FileExistenceTest{}
+
 			targetFileExistenceTest.Name = fileExistenceTest.Name
 			targetFileExistenceTest.Path = fileExistenceTest.Path
 
 			targetFileExistenceTest.ShouldExist, _ = strconv.ParseBool(fileExistenceTest.ShouldExist)
-			targetFileExistenceTest.Permissions = fileExistenceTest.Permissions
+
+			if !emptyString(fileExistenceTest.Permissions) {
+				targetFileExistenceTest.Permissions = fileExistenceTest.Permissions
+			}
 
 			err := targetFileExistenceTest.Validate()
 			if err != nil {
@@ -102,7 +121,9 @@ func ParseTests(imageName, driver string, verboseOutput, supressOut bool) {
 		}
 
 		metadataTests, _ := labels.GetImageMetadataTests(imageName)
-		pp.Println(metadataTests)
+		if verboseOutput {
+			pp.Println(metadataTests)
+		}
 
 		for _, metadataTest := range *metadataTests {
 			targetMetaDataTest := v2.MetadataTest{}
@@ -117,12 +138,18 @@ func ParseTests(imageName, driver string, verboseOutput, supressOut bool) {
 			}
 
 			exposedPorts := strings.Split(metadataTest.ExposedPorts, ",")
-			targetMetaDataTest.ExposedPorts = exposedPorts
+			if !containsEmptyStrings(exposedPorts) {
+				targetMetaDataTest.ExposedPorts = exposedPorts
+			}
 
-			targetMetaDataTest.Workdir = metadataTest.Workdir
+			if !emptyString(metadataTest.Workdir) {
+				targetMetaDataTest.Workdir = metadataTest.Workdir
+			}
 
 			volumes := strings.Split(metadataTest.Volumes, ",")
-			targetMetaDataTest.Volumes = volumes
+			if !containsEmptyStrings(volumes) {
+				targetMetaDataTest.Volumes = volumes
+			}
 
 			structureTest.MetadataTest = targetMetaDataTest
 		}

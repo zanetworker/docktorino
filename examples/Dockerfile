@@ -5,7 +5,7 @@ LABEL api.TEST.command=""\
       api.TEST.command.name="go version"\
       api.TEST.command.command="go"\
       api.TEST.command.args="version"\
-      api.TEST.command.expectedOutput="go version"\
+      api.TEST.command.expectedOutput="go version"
 
 # LABEL api.TEST.fileContent=""\
 #       api.TEST.fileContent.name="Debian Sources"\

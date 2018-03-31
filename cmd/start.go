@@ -82,7 +82,9 @@ func (s *startCmd) run() error {
 
 			case e := <-ch:
 				tag := e.Actor.Attributes["name"]
-				structuretests.ParseTests(tag, "docker", s.verbose, false)
+				if tag == s.image {
+					structuretests.ParseTests(tag, "docker", s.verbose, false)
+				}
 			case <-ctx.Done():
 				break
 			}

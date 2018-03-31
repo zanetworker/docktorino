@@ -1,0 +1,13 @@
+workspace:
+  base: /go
+  path: src/github.com/zanetworker/docktorino
+
+pipeline:
+  build: 
+    image: golang
+    commands: 
+      - make OS=linux dry 
+  lintAndTest:
+    image: golang
+    commands:
+      - make lint test 

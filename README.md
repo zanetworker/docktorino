@@ -1,0 +1,1 @@
+[![Build Status](http://e812a0e6.ngrok.io/api/badges/zanetworker/docktorino/status.svg?branch=master)](http://http://e812a0e6.ngrok.io/api/badges/zanetworker/docktorino/status.svg?branch=master)

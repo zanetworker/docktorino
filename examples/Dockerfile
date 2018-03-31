@@ -29,7 +29,7 @@ LABEL api.TEST.metadata=""\
       api.TEST.metadata.volumes=""\
       api.TEST.metadata.cmd=""\
       api.TEST.metadata.workdir=""
-ENV PATH /go/bin:/usr/local/go/bin:$PATH
+# ENV PATH /go/bin:/usr/local/go/bin:$PATH
 ENV GOPATH /go
 
 

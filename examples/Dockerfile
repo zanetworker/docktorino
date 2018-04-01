@@ -24,7 +24,7 @@ ADD dockumentation.md /dockumentation.md
 
 
 LABEL api.TEST.metadata=""\
-      api.TEST.metadata.env="GOPATH=/go,PATH=/go/bin:/usr/local/go/bin:$PATH"\
+      api.TEST.metadata.env="PATH=/go/bin:/usr/local/go/bin:$PATH"\
       api.TEST.metadata.exposedPorts=""\
       api.TEST.metadata.volumes=""\
       api.TEST.metadata.cmd=""\

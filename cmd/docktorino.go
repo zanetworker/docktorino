@@ -22,7 +22,6 @@ import (
 
 	"github.com/morikuni/aec"
 	"github.com/spf13/cobra"
-	"github.com/spf13/cobra/doc"
 	"github.com/zanetworker/docktorino/internal/environment"
 )
 
@@ -51,7 +50,7 @@ _____             _    _             _
                                                                                                               
 `
 
-func newRootCmd(args []string) *cobra.Command {
+func newRootCmd() *cobra.Command {
 	// rootCmd represents the base command when called without any subcommands
 	docktorinoCmd := &cobra.Command{
 		Use:   "docktorino",
@@ -100,13 +99,8 @@ func runDocktorino(cmd *cobra.Command, args []string) {
 
 //Execute command for dockument CLI
 func main() {
-	cmd := newRootCmd(os.Args[1:])
+	cmd := newRootCmd()
 	if err := cmd.Execute(); err != nil {
 		os.Exit(1)
-	}
-	err := doc.GenMarkdownTree(cmd, "./doc")
-	if err != nil {
-		log.Fatal(err)
-
 	}
 }

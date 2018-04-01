@@ -8,7 +8,6 @@ BUMP ?= minor
 BINARY := docktorino
 GOVERAGE := $(BIN_DIR)/goverage 
 GOLINT := $(BIN_DIR)/golint
-GOMETALINTER := $(BIN_DIR)/gometalinter
 
 PKGS := $(shell go list ./... | grep -v /vendor)
 os = $(word 1, $@)
@@ -16,10 +15,11 @@ os = $(word 1, $@)
 
 .PHONY: test 
 test: 
-	go test $(PKGS)
-	# goverage -race -coverprofile=coverage.out ./...
-    # go tool cover -html=coverage.out
-	
+	@go test $(PKGS)
+
+$(GOLINT): 
+	@go get -u golang.org/x/lint/golint
+
 .PHONY: lint
 lint: $(GOLINT)
 	@echo "+ $@"
@@ -29,13 +29,6 @@ lint: $(GOLINT)
 vet: 
 	@echo "+ $@"
 	@go vet $(shell go list ./... | grep -v vendor) | grep -v '.pb.go:' | tee /dev/stderr
-
-$(GOLINT): 
-	go get -u golang.org/x/lint/golint
-
-$(GOMETALINTER):
-	go get -u github.com/alecthomas/gometalinter
-	gometalinter --install &> /dev/null
 
 
 release: 
@@ -65,7 +58,7 @@ releases: release darwin windows linux
 
 .PHONY: dry
 dry: 
-	@- cd cmd && CGO_ENABLED=0 GOOS=$(OS) GOARCH=amd64 go build -ldflags="-X main.documentation=" -o ../$(BINARY)
+	@- cd cmd && CGO_ENABLED=0 GOOS=$(OS) GOARCH=amd64 go build -o ../$(BINARY)
 
 .PHONY: doc 
 doc: dry 

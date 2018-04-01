@@ -73,7 +73,7 @@ func getEnvVar(envVarsToConvert string) []unversioned.EnvVar {
 	envVarsToReturn := []unversioned.EnvVar{}
 	for _, env := range envVars {
 		envVarToReturn := unversioned.EnvVar{}
-		keyAndValue := strings.Split(env, ":")
+		keyAndValue := strings.Split(env, "=")
 		envVarToReturn.Key = keyAndValue[0]
 		envVarToReturn.Value = keyAndValue[1]
 		envVarsToReturn = append(envVarsToReturn, envVarToReturn)

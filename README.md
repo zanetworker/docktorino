@@ -32,13 +32,13 @@ You need to install `make` and `Go` on your system before proceeding.
 
 ```bash
 git clone https://github.com/zanetworker/docktorino.git
-cd dockument
+cd docktorino
 
-# build dockt binary if you have go installed
+# build docktorino binary if you have go installed
 make OS=<darwin|linux|windows> install
 
 # execute docktorino for command overview
-dockument
+docktorino
 
 # build docktorino binary 
 make OS=<darwin|linux|windows> dry

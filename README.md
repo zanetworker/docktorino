@@ -31,20 +31,20 @@ To get started with `Docktorino`, you can download the corresponding binary for 
 You need to install `make` and `Go` on your system before proceeding.
 
 ```bash
-git clone https://github.com/zanetworker/dockument.git
+git clone https://github.com/zanetworker/docktorino.git
 cd dockument
 
-# build dockument binary if you have go installed
+# build dockt binary if you have go installed
 make OS=<darwin|linux|windows> install
 
-# execute dockument for command overview
+# execute docktorino for command overview
 dockument
 
-# build dockument binary 
+# build docktorino binary 
 make OS=<darwin|linux|windows> dry
 
-# execute dokcument command for overview
-./dockument
+# execute docktorino command for overview
+./docktorino
 ```
 
 ### Download from the releases
@@ -108,9 +108,9 @@ Global Flags:
       --home string   location of your docktorino config. Overrides $DOCKTORINO_HOME  (default "/Users/adelias/.Docktorino"
 ``` 
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/lU7hpP2nfPw" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+For a complete demo please check this demo [video](https://youtu.be/lU7hpP2nfPw) or check the very slow GIF below (video to GIF conversion didn't go so well): 
 
-
+![](./demo/docktrino_demo.gif)
 
 ## Contributing
 

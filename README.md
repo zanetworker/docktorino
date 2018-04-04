@@ -5,7 +5,9 @@
 
 Docktorino is a real-time continious testing tool for your docker builds, helping you containerize with confidence!
 
-When building Docker images it is sometimes tricky to assert the image behavior, for example, whether the contents of the image you built is correct, or that commands can execute correctly inside your container ( maybe you forgot to set your binary's PATH). Docktrino makes these types of assertions easy to define when building your Docker images. It then listens to your Docker builds and triggers these tests on the spot to notify you if you have done something wrong, or if your container image is misbehaving.
+When building Docker images it is sometimes tricky to assert the image behavior, for example, whether the contents of the image you built is correct, or that commands can execute correctly inside your container ( maybe you forgot to set your binary's PATH).
+
+Docktrino makes these types of assertions easy to define when building your Docker images. It then listens to your Docker builds and triggers these tests on the spot to notify you if you have done something wrong, or if your container image is misbehaving.
 
 Check blog post [here](http://www.adelzaalouk.me/2018/docktorino/). 
 
@@ -59,13 +61,14 @@ Docktorino uses project [Dockument](https://github.com/zanetworker/dockument) to
 ```dockerfile
 FROM golang:alpine as builder
  
-###  Describe container tests based on container structure tests from google
+###  Describe container tests based on container structure tests from google!
 LABEL api.TEST.command=""\
       api.TEST.command.name="go version"\
       api.TEST.command.command="go"\
       api.TEST.command.args="version"\
       api.TEST.command.expectedOutput="go version"
-# Add file and check it's contents
+
+# Add file and check it's contents!
 LABEL api.TEST.fileExistence=""\
       api.TEST.fileExistence.name="Dockumentation Check"\
       api.TEST.fileExistence.path="/dockumentation.md"\
@@ -74,6 +77,7 @@ LABEL api.TEST.fileExistence=""\
 ADD dockumentation.md /dockumentation.md
 
 
+# Assert that environment variables are correctly defined!
 LABEL api.TEST.metadata=""\
       api.TEST.metadata.env="GOPATH=/go,PATH=/go/bin:/usr/local/go/bin:$PATH"\
       api.TEST.metadata.exposedPorts=""\
@@ -108,9 +112,11 @@ Global Flags:
       --home string   location of your docktorino config. Overrides $DOCKTORINO_HOME  (default "/Users/adelias/.Docktorino"
 ``` 
 
-For a complete demo please check this demo [video](https://youtu.be/lU7hpP2nfPw) or check the very slow GIF below (video to GIF conversion didn't go so well): 
+For a complete demo please check this demo [video](https://youtu.be/lU7hpP2nfPw):
 
-![](./demo/docktrino_demo.gif)
+[![Docktorino Demo](./demo/2018-04-04-11-05-16.png)](https://youtu.be/lU7hpP2nfPw)
+
+<!-- ![](./demo/docktrino_demo.gif) -->
 
 ## Contributing
 

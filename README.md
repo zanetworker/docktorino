@@ -3,7 +3,7 @@
 
 # Docktorino 
 
-Docktorino is a real-time continious testing tool for your docker builds, helping you containerize with confidence!
+Docktorino is a real-time continuous testing tool for your docker builds, helping you containerize with confidence!
 
 When building Docker images it is sometimes tricky to assert the image behavior, for example, whether the contents of the image you built is correct, or that commands can execute correctly inside your container ( maybe you forgot to set your binary's PATH).
 
@@ -96,7 +96,7 @@ This Dockerfile defines three tests:
 
 These tests styles are based on the [GCP container-structure-tests](https://github.com/GoogleCloudPlatform/container-structure-test) project tests. 
 
-Currently there is only one cammand available, this command starts `Docktorino` for the image of choice. For example `docktorino -i "repo/image:tag"` will start listening for new builds for "repo/image:tag" and trigger the tests defined in the Dockerfile.
+Currently there is only one command available, this command starts `Docktorino` for the image of choice. For example `docktorino -i "repo/image:tag"` will start listening for new builds for "repo/image:tag" and trigger the tests defined in the Dockerfile.
 
 ```
 Usage:

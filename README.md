@@ -1,7 +1,6 @@
+# Docktorino
+
 [![Build Status](http://zanetworkercicd.eu.ngrok.io/api/badges/zanetworker/docktorino/status.svg?branch=master)](http://zanetworkercicd.eu.ngrok.io/api/badges/zanetworker/docktorino/status.svg?branch=master)
-
-
-# Docktorino 
 
 Docktorino is a real-time continuous testing tool for your docker builds, helping you containerize with confidence!
 

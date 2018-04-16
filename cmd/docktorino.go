@@ -65,6 +65,7 @@ func newRootCmd() *cobra.Command {
 
 	docktorinoCmd.AddCommand(
 		newStartCmd(out),
+		newVersionCmd(out),
 	)
 
 	// set defaults from environment
